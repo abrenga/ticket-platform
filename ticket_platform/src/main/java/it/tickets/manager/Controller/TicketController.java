@@ -32,16 +32,14 @@ public class TicketController {
         return "userPage";
     }
 
-  @PostMapping("/searchTickets")
-  public String searchTickets(@Valid @ModelAttribute("searchText") TicketModel ticketModel, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
+    @PostMapping("/searchTickets")
+    public String searchTickets(@Valid @ModelAttribute("searchText") TicketModel ticketModel, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
             return "userPage";
         }
         List<TicketModel> tickets = ticketService.searchByTitle(ticketModel.getTitle());
         return "userPage";
-  }
-
-
+    }
 
 
 

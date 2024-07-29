@@ -41,7 +41,6 @@ public class TicketService implements ITicketService {
         ticketRepository.delete(ticket);
     }
 
-
     public List<TicketModel> showTicketsByUsderId(UserModel user) {
         List<TicketModel> ticketRelativeUser = ticketRepository.findByUser(user);
         return ticketRelativeUser;
@@ -53,18 +52,14 @@ public class TicketService implements ITicketService {
     }
 
     public List<TicketModel> searchByCategory(CategoriesModel categoies) {
-        List<TicketModel>  tickets = ticketRepository.findByCategoriesModel(categoies);
+        List<TicketModel>  tickets = ticketRepository.findByCategory(categoies);
         return tickets;
     }
 
-    public List<TicketModel> searchByCategory(CategoriesModel categoies) {
-        List<TicketModel>  tickets = ticketRepository.findByCategoriesModel(categoies);
-        return tickets;
-    }
-
-
-    public List<TicketModel> searchByCategory(TicketState state) {
+    public List<TicketModel> searchByState(TicketState state) {
         List<TicketModel>  tickets = ticketRepository.findByState(state);
         return tickets;
     }
+
+
 }

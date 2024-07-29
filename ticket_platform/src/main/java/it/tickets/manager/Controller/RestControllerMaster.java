@@ -3,12 +3,11 @@ package it.tickets.manager.Controller;
 import java.util.List;
 import java.util.Optional;
 
+import it.tickets.manager.Service.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import it.tickets.manager.Model.CategoriesModel;
 import it.tickets.manager.Model.TicketModel;
@@ -21,15 +20,17 @@ public class RestControllerMaster {
 
     @Autowired
     ITicketService ticketService;
+    @Autowired
+    ICategoryService categoryService;
 
 
-    @GetMapping("/tickets")
-    public  ResponseEntity<TicketModel> getTicketModel() {
+    @GetMapping("/ticketsApi")
+    public ResponseEntity<List<TicketModel>> getTicketModel() {
 
-         Optional<TicketModel> tickets = ticketService.getAllTickets();
+        List<TicketModel> tickets = ticketService.getAllTickets();
         /*controllare se si deve richiamare il service o la sua interfaccia */
-        if(tickets.isPresent()){
-            return new ResponseEntity<>(tickets.get(),HttpStatus.OK);
+        if (tickets != null) {
+            return new ResponseEntity<>(tickets, HttpStatus.OK);
 
         }else{
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -37,25 +38,26 @@ public class RestControllerMaster {
 
     }
 
-    @GetMapping("/tickets/category")/*Controlla */
-    public ResponseEntity<TicketModel> getTicketForCategory(@RequestParam(name="category") CategoriesModel category) {
-        
-        Optional<TicketModel> tickesfindBycategory = ticketservice.searchByCategory(category);
+    @GetMapping("/ticketsApi/{idCategory}")/*Controlla */
+    public ResponseEntity<List<TicketModel>> getTicketForCategory(@PathVariable("idCategory") Integer id) {
+        CategoriesModel category = categoryService.findCategory(id);
+        List<TicketModel> tickesfindBycategory = ticketService.searchByCategory(category);
 
-        if(tickesfindBycategory.isPresent()){
-            return new ResponseEntity<>(tickesfindBycategory.get(),HttpStatus.OK );
+        if (tickesfindBycategory != null) {
+            return new ResponseEntity<>(tickesfindBycategory, HttpStatus.OK);
         }else{
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
 
 
-    @GetMapping("/tickets/state")
-public ResponseEntity<TicketModel> searchTicketsByCategory(@RequestParam(name="state") TicketModel state){
-    Optional<TicketModel> ticketsByCategory= ticketService.searchByCategory(state);
+    @GetMapping("/ticketsApi/state")
+    public ResponseEntity<List<TicketModel>> searchTicketsByState(@RequestParam(name = "state") TicketState state) {
+        List<TicketModel> ticketsByCategory = ticketService.searchByState(state);
 
 
-    if(ticketsByCategory.isPresent()){
-        return new ResponseEntity<>(ticketsByCategory.get(),HttpStatus.OK );
+        if (ticketsByCategory != null) {
+            return new ResponseEntity<>(ticketsByCategory, HttpStatus.OK);
     }else{
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
