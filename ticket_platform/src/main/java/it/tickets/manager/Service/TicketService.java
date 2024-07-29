@@ -1,6 +1,8 @@
 package it.tickets.manager.Service;
 
+import it.tickets.manager.Model.CategoriesModel;
 import it.tickets.manager.Model.TicketModel;
+import it.tickets.manager.Model.TicketState;
 import it.tickets.manager.Model.UserModel;
 import it.tickets.manager.Repository.TicketsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,12 +48,23 @@ public class TicketService implements ITicketService {
     }
 
     public List<TicketModel> searchByTitle(String title) {
-        List<TicketModel>  ticket = ticketRepository.findByTitleLike(title);
-        return ticket;
+        List<TicketModel>  tickets = ticketRepository.findByTitleLike(title);
+        return tickets;
+    }
+
+    public List<TicketModel> searchByCategory(CategoriesModel categoies) {
+        List<TicketModel>  tickets = ticketRepository.findByCategoriesModel(categoies);
+        return tickets;
+    }
+
+    public List<TicketModel> searchByCategory(CategoriesModel categoies) {
+        List<TicketModel>  tickets = ticketRepository.findByCategoriesModel(categoies);
+        return tickets;
     }
 
 
-
-
-
+    public List<TicketModel> searchByCategory(TicketState state) {
+        List<TicketModel>  tickets = ticketRepository.findByState(state);
+        return tickets;
+    }
 }

@@ -1,6 +1,7 @@
 package it.tickets.manager.Service;
 
 import it.tickets.manager.Model.TicketModel;
+import it.tickets.manager.Model.TicketState;
 import it.tickets.manager.Model.UserModel;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public interface ITicketService {
     List<TicketModel> showTicketsByUsderId(UserModel user);
 
    List<TicketModel>  searchByTitle(String title);
+
+   List<TicketModel>  searchByCategory(TicketState state);
 }
