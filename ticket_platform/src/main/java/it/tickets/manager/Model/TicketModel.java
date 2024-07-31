@@ -35,7 +35,7 @@ public class TicketModel {
     private CategoriesModel category;
 
 
-    @OneToMany(mappedBy = "id")
+    @OneToMany(mappedBy = "ticket")
     private List<NoteModel> notes;
 
     @ManyToOne

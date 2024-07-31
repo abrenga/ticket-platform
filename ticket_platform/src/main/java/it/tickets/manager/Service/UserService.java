@@ -19,6 +19,11 @@ public class UserService implements  IUserService {
         return users;
     }
 
+    @Override
+    public void save(UserModel user) {
+        userRepository.save(user);
+    }
+
 
     @Override
     public UserModel findTicketOfUser(Integer id) {
@@ -32,6 +37,16 @@ public class UserService implements  IUserService {
             return user;
         }catch (Exception e){
              throw new IllegalAccessError("User not found");
+        }
+
+    }
+
+    public UserModel findUserByName( String name){
+        try {
+            UserModel user = userRepository.findByUsername(name).get();
+            return user;
+        }catch (Exception e){
+            throw new IllegalAccessError("User not found");
         }
 
     }

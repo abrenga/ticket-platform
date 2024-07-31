@@ -48,6 +48,11 @@ public class TicketService implements ITicketService {
         return ticketRelativeUser;
     }
 
+
+    public String colorFill(){
+        return "";
+    }
+
     public List<TicketModel> searchByTitle(String title) {
         List<TicketModel>  tickets = ticketRepository.findByTitleLike("%"+title+"%");
         return tickets;
@@ -63,19 +68,19 @@ public class TicketService implements ITicketService {
         return tickets;
     }
     
-    /*public boolean isAviable(UserModel user) {
+    public boolean canChangeAvailability(UserModel user) {
     	List<TicketModel> tickets = showTicketsByUsderId(user);
     	
     	for(int i=0; i<tickets.size(); i++) {
     		TicketModel ticket =tickets.get(i) ;
-    		if(ticket.getState().equals("close")) {
-    			return true;
+    		if(ticket.getState()==TicketState.Open||ticket.getState()==TicketState.InProgress) {
+    			return false;
     		}
     		
     	}
-		return false;
+		return true;
     	
-    }*/
+    }
     
 
 

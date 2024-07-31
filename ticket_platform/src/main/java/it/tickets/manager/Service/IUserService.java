@@ -10,4 +10,5 @@ public interface IUserService {
     UserModel findUser(Integer id);
     List<UserModel> showUser();
 
+    void save(UserModel user);
 }

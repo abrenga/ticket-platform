@@ -14,6 +14,7 @@
     <title>Tiket Platform</title>
 </head>
 <body>
+<div th:replace="~{fragments.html::header-block}"></div>
 <div class="container">
     <main>
 
@@ -30,7 +31,7 @@
                     </div>
                     <div class="col-sm-3">
                         <label for="title" class="form-label">Titolo</label>
-                        <input type="text" class="form-control" id="title"  th:field="*{title}" th:errorClass="is-invalid">
+                        <input th:readonly="${!isAdmin}" type="text" class="form-control" id="title"  th:field="*{title}" th:errorClass="is-invalid">
                         <div th:if="${#fields.hasErrors('title')}" class="invalid-feedback">
 
                             <ul>
@@ -42,7 +43,7 @@
 
                     <div class="col-sm-9">
                         <label for="description" class="form-label">Descrizione</label>
-                        <input type="text" class="form-control" id="description"  th:field="*{text}">
+                        <input type="text" class="form-control" th:readonly="${!isAdmin}" id="description"  th:field="*{text}">
                         <div th:if="${#fields.hasErrors('text')}" class="invalid-feedback">
 
                             <ul>
@@ -53,7 +54,8 @@
 
                     <div class="col-md-4">
                         <label for="category" class="form-label">Category:</label>
-                        <select class="form-select" id="category" required="" th:field="*{category}" th:errorClass="is-invalid">
+                        <input th:unless="${isAdmin}" type="hidden"  th:field="*{category}" th:value="${ticket.category.id}">
+                        <select th:if="${isAdmin}"  class="form-select" id="category" required="" th:field="*{category}" th:errorClass="is-invalid">
                             <option value="">Choose...</option>
                             <option th:each="category: ${categories}" th:value="${category.id}"
                                     th:text="${category.category}"></option>
@@ -81,7 +83,8 @@
 
                     <div class="col-md-4">
                         <label for="operator" class="form-label">Operator:</label>
-                        <select class="form-select" id="operator" required="" th:field="*{user}" th:errorClass="is-invalid">
+                        <input th:unless="${isAdmin}" type="hidden"  th:field="*{user}" th:value="${ticket.user.id}">
+                        <select th:if="${isAdmin}" class="form-select" id="operator" required="" th:field="*{user}" th:errorClass="is-invalid">
                             <option value="">Choose...</option>
                             <option th:each="operator: ${operators}" th:value="${operator.id}"
                                     th:text="${operator.username}"></option>

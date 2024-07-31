@@ -1,4 +1,4 @@
-/*package it.tickets.manager.Security;
+package it.tickets.manager.Security;
 
 import it.tickets.manager.Model.UserModel;
 import it.tickets.manager.Repository.UserRepository;
@@ -13,8 +13,8 @@ import java.util.Optional;
 
 @Service
 public class DatabaseUserDetailService implements UserDetailsService {
-@Autowired
-private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -23,9 +23,9 @@ private UserRepository userRepository;
         if(user.isPresent()){
             return new DatabaseUserDetails(user.get());
         }else
-                throw new UsernameNotFoundException(username);
+            throw new UsernameNotFoundException(username);
     }
 
 
 
-}*/
+}

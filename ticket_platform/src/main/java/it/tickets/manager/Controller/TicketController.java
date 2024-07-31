@@ -5,13 +5,14 @@ import it.tickets.manager.Model.NoteModel;
 import it.tickets.manager.Model.TicketModel;
 import it.tickets.manager.Model.TicketState;
 import it.tickets.manager.Model.UserModel;
+import it.tickets.manager.Security.DatabaseUserDetails;
 import it.tickets.manager.Service.INoteService;
 import it.tickets.manager.Service.ITicketService;
 import it.tickets.manager.Service.UserService;
-import it.tickets.manager.Service.categoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,11 +35,36 @@ public class TicketController {
     @Autowired
     private INoteService noteService;
 
+    private boolean hasAuthority(Authentication authentication, String role) {
+        for (GrantedAuthority authority : authentication.getAuthorities()) {
+            if (authority.getAuthority().equals(role)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @GetMapping("afterLogin")
+    public String onAfterLogin(Authentication authentication) {
+        if (authentication.isAuthenticated()) {
+            if (hasAuthority(authentication, "ADMIN")) {
+                return "redirect:/tickets";
+            } else {
+                DatabaseUserDetails userDetails = (DatabaseUserDetails) authentication.getPrincipal();
+                return "redirect:/tickets/user/" + userDetails.getId();
+            }
+        } else {
+            return "redirect:/login";
+        }
+    }
+
     /*visualizza tutti i ticket nel database*/
     @GetMapping
-    public String showTickets(Model model) {
+    public String showTickets(Authentication authentication, Model model) {
         //model.addAttribute("searchText", new TicketModel());
         model.addAttribute("allTickets", ticketService.getAllTickets());
+        model.addAttribute("authenticator", authentication);
         model.addAttribute("Admin", true);
         return "userPage";
     }
@@ -57,10 +83,11 @@ public class TicketController {
 
 
     @GetMapping("user/{userId}")
-        public String ticketOfIdUser(@PathVariable(name="userId") Integer id, Model model){
+    public String ticketOfIdUser(@PathVariable(name = "userId") Integer id, Authentication authentication, Model model) {
         UserModel UserEnable= userService.findTicketOfUser(id);
         List<TicketModel> ticket= ticketService.showTicketsByUsderId(UserEnable);
         model.addAttribute("allTickets", ticket);
+        model.addAttribute("authenticator", authentication);
         model.addAttribute("Admin", false);
         return "userPage";
         }
@@ -77,12 +104,13 @@ public class TicketController {
     }
 
     @GetMapping("createTicket")
-    public String createTicket(Model model) {
+    public String createTicket(Model model,Authentication authentication) {
         model.addAttribute("ticket", new TicketModel());
         model.addAttribute("categories",categoryService.showCAtegory());
         model.addAttribute("states", TicketState.class);
         model.addAttribute("operators", userService.showUser());
         model.addAttribute("up", false);
+        model.addAttribute("isAdmin", hasAuthority(authentication,"ADMIN"));
         return "formPage";
     }
 
@@ -99,19 +127,21 @@ public class TicketController {
 
 
     @GetMapping("updateTicket/{id}")
-    public String updateTicket(@PathVariable("id") Integer id, Model model) {
+    public String updateTicket(Authentication authentication, @PathVariable("id") Integer id, Model model) {
         TicketModel ticket = ticketService.findByTicketId(id);
         model.addAttribute("categories",categoryService.showCAtegory());
         model.addAttribute("states", TicketState.values());
         model.addAttribute("operators", userService.showUser());
         model.addAttribute("ticket", ticket);
+        model.addAttribute("authenticator", authentication);
         model.addAttribute("up", true);
+        model.addAttribute("isAdmin", hasAuthority(authentication,"ADMIN"));
         return "formPage";
     }
 
 
     @PostMapping("updateTicket/{id}")
-    public String updateTicket(@Valid @ModelAttribute(name = "ticket") TicketModel ticket, Model model,BindingResult bindingResult) {
+    public String updateTicket(@Valid @ModelAttribute(name = "ticket") TicketModel ticket, Authentication authentication, Model model, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("categories",categoryService.showCAtegory());
             model.addAttribute("states", TicketState.values());
@@ -120,9 +150,20 @@ public class TicketController {
             model.addAttribute("up", true);
             return "formPage";
         }
-
-        ticketService.saveTicket(ticket);
-        return "redirect:/tickets";
+        if (authentication.isAuthenticated()) {
+            if (hasAuthority(authentication, "ADMIN")) {
+                ticketService.saveTicket(ticket);
+            } else {
+                TicketModel originalTicket = ticketService.findByTicketId(ticket.getId());
+                originalTicket.setState(ticket.getState());
+                ticketService.saveTicket(originalTicket);
+            }
+        }
+        if (hasAuthority(authentication, "ADMIN")) {
+            return "redirect:/tickets";
+        }else {
+            return "redirect:/tickets/user/"+ ((DatabaseUserDetails)authentication.getPrincipal()).getId();
+        }
     }
 
     @PostMapping("delete/{id}")
@@ -130,15 +171,33 @@ public class TicketController {
         ticketService.deleteTicket(id);
         return "redirect:/tickets";
     }
-    
-    /*aggiunta del nome del username
-    @GetMapping
+
+    //aggiunta del nome del username
+    @GetMapping("/user")
     public String index(Authentication authentication, Model model) {
-    model.addAttribute("authenicator", authentication);
-    return "userPage";
-    }*/
-    
-    
+//        model.addAttribute("authenticator", authentication);
+//        model.addAttribute("isAuthenticated", authentication.isAuthenticated());
+        DatabaseUserDetails userDetails = (DatabaseUserDetails) authentication.getPrincipal();
+        model.addAttribute("userDetails", userDetails);
+        UserModel user = userService.findUserByName(userDetails.getUsername());
+        model.addAttribute("showButton", ticketService.canChangeAvailability(user));
+        model.addAttribute("goHome", user.getId());
+        model.addAttribute("available", user.getIsAvailable() ? "disponibile" : "offline");
+        return "DetailUserPage";
+    }
+
+    @PostMapping("/changeUserState")
+    public String changeUserState(Authentication authentication) {
+        DatabaseUserDetails userDetails = (DatabaseUserDetails) authentication.getPrincipal();
+        UserModel user = userService.findUserByName(userDetails.getUsername());
+        if (user.getAvailable()) {
+            user.setIsAvailable(false);
+        } else {
+            user.setIsAvailable(true);
+        }
+        userService.save(user);
+        return "redirect:/tickets/user";
+    }
   
   
 

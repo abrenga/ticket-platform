@@ -26,22 +26,22 @@
 			<p th:text="${showDetail.date}"></p>
 			<p class="lead" th:text="${showDetail.text}"></p>
 			<a class="btn btn-md btn-secondary" href="/docs/5.3/components/navbar/" role="button"
-				th:href="@{/tickets/updateTicket/{id}(id=${showDetail.id})}">modifica>></a>
+				th:href="@{/tickets/updateTicket/{id}(id=${showDetail.id})}" >modifica</a>
 			<a class="btn btn-md btn-secondary" href="/docs/5.3/components/navbar/" role="button"
-				th:href="@{/notes/{id}/addNote(id=${showDetail.id})}">Aggiungi nota:>></a>
+				th:href="@{/notes/{id}/addNote(id=${showDetail.id})}">Aggiungi nota:</a>
+			<a class="btn btn-md btn-secondary" href="/docs/5.3/components/navbar/" role="button"
+			   th:href="@{/afterlogin}">annulla modifica</a>
 		</div>
-
 
 
 		<h1>Note:</h1>
-		<div class="bg-body-tertiary p-5 rounded mt-3 	th:each=" note:${notes}"">
-			<h5 th:text="${note.user.username}"></h5>
-			<h6 th:text="${note.date}">
-				</h2>></h6>
-			<h7 th:text="${showDetail.state}"></h7>
-			<p th:text="${showDetail.date}"></p>
-			<p class="lead" th:text="${note.notes}"></p>
-		</div>
+		<div class="bg-body-tertiary p-5 rounded mt-3" >
+			<div th:each="note:${showDetail.getNotes()}">
+				<p th:text="${note.getDate()}"></p>
+				<p th:text="${note.getUser().getUsername()}"></p>
+				<p class="lead" th:text="${note.getNotes()}"></p>
+			</div>
+
 		</div>
 
 	</main>

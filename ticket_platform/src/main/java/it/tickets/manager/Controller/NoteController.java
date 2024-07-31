@@ -33,16 +33,16 @@ public class NoteController {
         TicketModel ticket = ticketService.findByTicketId(id);
         model.addAttribute("user",ticket.getUser());
         model.addAttribute("ticket",ticket);
-        NoteModel note =new NoteModel();
+        NoteModel note = new NoteModel();
         note.setUser(ticket.getUser());
-        model.addAttribute("note",note );
+        model.addAttribute("note",note);
 
 
         return "formNote";
     }
 
-    @PostMapping("/{id}/addNote")
-    public String addNote(@PathVariable("id") Integer ticketid, @ModelAttribute("note") NoteModel note,BindingResult result) {
+    @PostMapping("/{ticketId}/addNote")
+    public String addNote(@PathVariable("ticketId") Integer ticketid, @ModelAttribute("note") NoteModel note,BindingResult result) {
         if (result.hasErrors()) {
             return "formNote";
         }

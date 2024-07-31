@@ -26,4 +26,5 @@ public interface ITicketService {
     List<TicketModel> searchByState(TicketState state);
 
 
+    boolean canChangeAvailability(UserModel user);
 }
