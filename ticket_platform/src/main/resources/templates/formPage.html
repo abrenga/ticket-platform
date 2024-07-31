@@ -1,0 +1,113 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <title>Tiket Platform</title>
+</head>
+<body>
+<div class="container">
+    <main>
+
+        <div class="row mt-4 g-5">
+        </div>
+        <div class="col-md-7 col-lg-8">
+            <h4 class="mb-3">Aggiungi tickets</h4>
+            <form class="needs-validation" novalidate="" th:object="${ticket}"
+                  th:action="${up} ? @{/tickets/updateTicket/{id}(id=${ticket.id})} : @{/tickets/createTicket}"
+                  method="post">
+                <div class="row g-3">
+                    <div>
+                        <input type="hidden" class="form-control" id="date"  th:field="*{date}" th:errorClass="is-invalid">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="title" class="form-label">Titolo</label>
+                        <input type="text" class="form-control" id="title"  th:field="*{title}" th:errorClass="is-invalid">
+                        <div th:if="${#fields.hasErrors('title')}" class="invalid-feedback">
+
+                            <ul>
+                                <li th:each="err : ${#fields.errors('title')}" th:text="${err}"></li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    <div class="col-sm-9">
+                        <label for="description" class="form-label">Descrizione</label>
+                        <input type="text" class="form-control" id="description"  th:field="*{text}">
+                        <div th:if="${#fields.hasErrors('text')}" class="invalid-feedback">
+
+                            <ul>
+                                <li th:each="err : ${#fields.errors('text')}" th:text="${err}"></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="category" class="form-label">Category:</label>
+                        <select class="form-select" id="category" required="" th:field="*{category}" th:errorClass="is-invalid">
+                            <option value="">Choose...</option>
+                            <option th:each="category: ${categories}" th:value="${category.id}"
+                                    th:text="${category.category}"></option>
+                        </select>
+                        <div th:if="${#fields.hasErrors('category')}" class="invalid-feedback">
+
+                            <ul>
+                                <li th:each="err : ${#fields.errors('category')}" th:text="${err}"></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="state" class="form-label">State:</label>
+                        <select class="form-select" id="state" required="" th:field="*{state}" name="TicketState" th:errorClass="is-invalid">
+                            <option th:each="state: ${T(it.tickets.manager.Model.TicketState).values()}" th:value="${state}" th:text="${state}"></option>
+                        </select>
+                        <div th:if="${#fields.hasErrors('state')}" class="invalid-feedback">
+
+                            <ul>
+                                <li th:each="err : ${#fields.errors('state')}" th:text="${err}"></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="operator" class="form-label">Operator:</label>
+                        <select class="form-select" id="operator" required="" th:field="*{user}" th:errorClass="is-invalid">
+                            <option value="">Choose...</option>
+                            <option th:each="operator: ${operators}" th:value="${operator.id}"
+                                    th:text="${operator.username}"></option>
+                        </select>
+                        <div th:if="${#fields.hasErrors('id')}" class="invalid-feedback">
+
+                            <ul>
+                                <li th:each="err : ${#fields.errors('id')}" th:text="${err}"></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <button class="w-100 btn btn-primary btn-lg mt-4" type="submit" th:text="${up}?'Aggiungi modifica':'Aggiungi'"></button>
+                </div>
+            </form>
+            <form method="post" th:action="@{/tickets/delete/{id}(id=${ticket.id})}">
+                <button  sec:authorize="hasAuthority('Adimin')" class="w-100 btn btn-danger btn-lg mt-4" type="submit" th:if="${up}">Delete</button>
+            </form>
+        </div>
+    </main>
+
+</div>
+</main>
+</div>
+
+</body>
+
+<div th:replace="~{fragments.html::footer-block}"></div>
+</html>

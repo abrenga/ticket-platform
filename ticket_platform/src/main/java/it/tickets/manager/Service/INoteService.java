@@ -2,6 +2,7 @@ package it.tickets.manager.Service;
 
 import it.tickets.manager.Model.NoteModel;
 import it.tickets.manager.Model.TicketModel;
+import it.tickets.manager.Model.UserModel;
 
 import java.util.List;
 

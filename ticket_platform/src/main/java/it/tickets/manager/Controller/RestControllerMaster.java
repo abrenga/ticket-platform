@@ -1,7 +1,6 @@
 package it.tickets.manager.Controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import it.tickets.manager.Service.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,13 +62,5 @@ public class RestControllerMaster {
     }
 }
 
-            
-
-
-    
-
-
-
-    
 
 }

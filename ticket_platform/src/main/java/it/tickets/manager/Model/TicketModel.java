@@ -17,8 +17,9 @@ public class TicketModel {
 
     private String title;
 
-    @DateTimeFormat(pattern = "dd-MM-YYYY")
+
     @Column( nullable = false)
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate date;
 
 

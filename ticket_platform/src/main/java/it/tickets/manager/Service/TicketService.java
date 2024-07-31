@@ -8,6 +8,7 @@ import it.tickets.manager.Repository.TicketsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -24,6 +25,7 @@ public class TicketService implements ITicketService {
 
     public List<TicketModel> getAllTickets() {
         List<TicketModel> tickets = ticketRepository.findAll();
+
         return tickets;
     }
 
@@ -47,7 +49,7 @@ public class TicketService implements ITicketService {
     }
 
     public List<TicketModel> searchByTitle(String title) {
-        List<TicketModel>  tickets = ticketRepository.findByTitleLike(title);
+        List<TicketModel>  tickets = ticketRepository.findByTitleLike("%"+title+"%");
         return tickets;
     }
 

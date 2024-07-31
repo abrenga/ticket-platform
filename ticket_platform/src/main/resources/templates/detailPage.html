@@ -20,29 +20,37 @@
     <h1>In Dettaglio</h1>
     <div class="bg-body-tertiary p-5 rounded mt-3">
         <h2 th:text="${showDetail.title}"></h2>
+        <h6 th:text="${showDetail.category.category}"></h6>
+        <h7 th:text="${showDetail.state}"></h7>
+        <p th:text="${showDetail.date}"></p>
         <p class="lead" th:text="${showDetail.text}"></p>
-        <a class="btn btn-md btn-secondary" href="/docs/5.3/components/navbar/" role="button">modifica>></a>
-        <a class="btn btn-md btn-secondary" href="/docs/5.3/components/navbar/" th:href="@{/formPage}" role="button">Aggiungi nota:>></a>
+        <a class="btn btn-md btn-secondary" href="/docs/5.3/components/navbar/" role="button"
+           th:href="@{/tickets/updateTicket/{id}(id=${showDetail.id})}">modifica>></a>
+        <a class="btn btn-md btn-secondary" href="/docs/5.3/components/navbar/" role="button"
+           th:href="@{/notes/{id}/addNote(id=${showDetail.id})}">Aggiungi nota:>></a>
     </div>
 
-    <div class="my-3 p-3 bg-body rounded shadow-sm" >
-        <h6 class="border-bottom pb-2 mb-0">Note:</h6>
-        <div class="d-flex text-body-secondary pt-3" th:each="note:${notes}">
-            <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32"
-                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32"
-                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
-                <rect width="100%" height="100%" fill="#007bff"></rect>
-                <text x="50%" y="50%" fill="#007bff" dy=".3em">32x32</text>
-            </svg>
-            <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
-                <div class="d-flex justify-content-between">
-                    <p th:date="${note.getDate()}"></p>
-                    <strong class="text-gray-dark" th:text="${note.getUser()}">Full Name</strong>
-                    <p th:text="${note.getNotes()}"></p>
+
+    <div class="modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content" th:each="note:${notes}">
+                <div class="modal-header">
+                    <h5 class="modal-title" th:text="${note.user.username}"></h5>
+                    <h7 class="modal-title" th:text="${note.date}"></h7>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <span class="d-block">@username</span>
+                <div class="modal-body">
+                    <p th:text="${note.notes}"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
             </div>
         </div>
+    </div>
+
+    </div>
     </div>
 
 </main>
