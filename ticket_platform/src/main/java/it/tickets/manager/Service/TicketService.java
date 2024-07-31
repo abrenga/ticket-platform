@@ -62,6 +62,24 @@ public class TicketService implements ITicketService {
         List<TicketModel>  tickets = ticketRepository.findByState(state);
         return tickets;
     }
+    
+    /*public boolean isAviable(UserModel user) {
+    	List<TicketModel> tickets = showTicketsByUsderId(user);
+    	
+    	for(int i=0; i<tickets.size(); i++) {
+    		TicketModel ticket =tickets.get(i) ;
+    		if(ticket.getState().equals("close")) {
+    			return true;
+    		}
+    		
+    	}
+		return false;
+    	
+    }*/
+    
 
+
+    
+  
 
 }

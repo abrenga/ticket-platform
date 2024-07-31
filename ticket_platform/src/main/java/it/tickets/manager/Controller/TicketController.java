@@ -130,6 +130,18 @@ public class TicketController {
         ticketService.deleteTicket(id);
         return "redirect:/tickets";
     }
+    
+    /*aggiunta del nome del username
+    @GetMapping
+    public String index(Authentication authentication, Model model) {
+    model.addAttribute("authenicator", authentication);
+    return "userPage";
+    }*/
+    
+    
+  
+  
+
 
 
 }
