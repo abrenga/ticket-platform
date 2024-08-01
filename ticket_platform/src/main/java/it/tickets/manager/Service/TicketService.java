@@ -1,9 +1,7 @@
 package it.tickets.manager.Service;
 
-import it.tickets.manager.Model.CategoriesModel;
-import it.tickets.manager.Model.TicketModel;
-import it.tickets.manager.Model.TicketState;
-import it.tickets.manager.Model.UserModel;
+import it.tickets.manager.Model.*;
+import it.tickets.manager.Repository.NotesRepository;
 import it.tickets.manager.Repository.TicketsRepository;
 import it.tickets.manager.Security.DatabaseUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +21,8 @@ public class TicketService implements ITicketService {
 
     @Autowired
     public UserService userService;
+    @Autowired
+    private NotesRepository notesRepository;
 
     public List<TicketModel> getAllTickets() {
         List<TicketModel> tickets = ticketRepository.findAll();
@@ -41,6 +41,8 @@ public class TicketService implements ITicketService {
 
     public void deleteTicket(Integer id){
         TicketModel ticket = ticketRepository.findById(id).get();
+        List<NoteModel> note = ticket.getNotes();
+        notesRepository.deleteAllInBatch(note);
         ticketRepository.delete(ticket);
     }
 

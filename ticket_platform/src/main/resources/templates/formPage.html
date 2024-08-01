@@ -43,7 +43,7 @@
 
                     <div class="col-sm-9">
                         <label for="text" class="form-label">Descrizione</label>
-                        <input type="text" class="form-control" th:readonly="${!isAdmin}" id="text"  th:field="*{text}">
+                        <input type="text" class="form-control" th:readonly="${!isAdmin}" id="text"  th:field="*{text}" th:errorClass="is-invalid">
                         <div th:if="${#fields.hasErrors('text')}" class="invalid-feedback">
 
                             <ul>
@@ -56,7 +56,6 @@
                         <label for="category" class="form-label">Category:</label>
                         <input th:unless="${isAdmin}" type="hidden"  th:field="*{category}" th:value="${ticket.category.id}">
                         <select th:if="${isAdmin}"  class="form-select" id="category" required="" th:field="*{category}" th:errorClass="is-invalid">
-                            <option value="">Choose...</option>
                             <option th:each="category: ${categories}" th:value="${category.id}"
                                     th:text="${category.category}"></option>
                         </select>
@@ -85,7 +84,6 @@
                         <label for="operator" class="form-label">Operator:</label>
                         <input th:unless="${isAdmin}" type="hidden"  th:field="*{user}" th:value="${ticket.user.id}">
                         <select th:if="${isAdmin}" class="form-select" id="operator" required="" th:field="*{user}" th:errorClass="is-invalid">
-                            <option value="">Choose...</option>
                             <option th:each="operator: ${operators}" th:value="${operator.id}"
                                     th:text="${operator.username}"></option>
                         </select>
@@ -113,4 +111,7 @@
 </body>
 
 <div th:replace="~{fragments.html::footer-block}"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
 </html>

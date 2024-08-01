@@ -25,7 +25,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/notes/{id}/addNote","/tickets/afterLogin","/searchTickets","/tickets/{id}", "tickets/updateTicket/{id}").hasAnyAuthority("USER", "ADMIN")
                 .requestMatchers(
                         "/tickets/createTicket",
-                        "/tickets/delete/**",
+                        "/tickets/delete/{id}",
                         "/tickets")
                     .hasAuthority("ADMIN")
 

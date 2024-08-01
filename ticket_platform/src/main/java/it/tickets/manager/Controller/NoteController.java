@@ -3,12 +3,15 @@ package it.tickets.manager.Controller;
 import it.tickets.manager.Model.NoteModel;
 import it.tickets.manager.Model.TicketModel;
 import it.tickets.manager.Model.UserModel;
+import it.tickets.manager.Security.DatabaseUserDetails;
 import it.tickets.manager.Service.INoteService;
 import it.tickets.manager.Service.ITicketService;
 import it.tickets.manager.Service.IUserService;
 import it.tickets.manager.Service.TicketService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -44,7 +47,7 @@ public class NoteController {
     }
 
     @PostMapping("/{ticketId}/addNote")
-    public String addNote(@PathVariable("ticketId") Integer ticketid, @Valid @ModelAttribute("note") NoteModel note, BindingResult result, Model model) {
+    public String addNote(@PathVariable("ticketId") Integer ticketid, @Valid @ModelAttribute("note") NoteModel note, Authentication authentication, BindingResult result, Model model) {
         if (note.getNotes().isBlank()) {
             result.addError(new ObjectError("notes", "notes non può essere vuoto"));
         }
@@ -57,6 +60,9 @@ public class NoteController {
             return "formNote";
         }
 
+        DatabaseUserDetails userDetails =((DatabaseUserDetails)authentication.getPrincipal());
+        UserModel usermodel= userService.findUser(userDetails.getId());
+        note.setUser(usermodel);
         noteService.addNoteInTicket(ticketid, note);
 
         return "redirect:/tickets/"+ticketid;
