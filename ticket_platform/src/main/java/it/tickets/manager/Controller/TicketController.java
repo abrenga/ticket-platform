@@ -70,9 +70,16 @@ public class TicketController {
     }
 
     @GetMapping("/searchTickets")
-    public String searchTickets( @RequestParam("title") String title,Model model) {
+    public String searchTickets( @RequestParam("title") String title,Authentication authentication,Model model) {
+        List<TicketModel> tickets;
 
-        List<TicketModel> tickets = ticketService.searchByTitle(title);
+         if (hasAuthority(authentication, "ADMIN")) {
+            tickets = ticketService.searchByTitle(title);
+        } else {
+             DatabaseUserDetails userDetails = (DatabaseUserDetails) authentication.getPrincipal();
+             UserModel user = userService.findUser(userDetails.getId());
+            tickets = ticketService.searchByTitleAndUserId(title,user);
+        }
         model.addAttribute("allTickets", tickets);
         model.addAttribute("title", title);
 
@@ -116,8 +123,14 @@ public class TicketController {
 
     /*controlla se mette tutto nel form da solo */
     @PostMapping("createTicket")
-    public String createTicket(@Valid @ModelAttribute(name = "ticket") TicketModel ticket, BindingResult bindingResult) {
+    public String createTicket(@Valid @ModelAttribute(name = "ticket") TicketModel ticket, BindingResult bindingResult,Model model,Authentication authentication) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("categories",categoryService.showCAtegory());
+            model.addAttribute("states", TicketState.class);
+            model.addAttribute("operators", userService.showUser());
+            model.addAttribute("up", false);
+            model.addAttribute("isAdmin", hasAuthority(authentication,"ADMIN"));
+
             return "formPage";
         }
         ticket.setDate(LocalDate.now());

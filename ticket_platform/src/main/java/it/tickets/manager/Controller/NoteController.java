@@ -7,10 +7,12 @@ import it.tickets.manager.Service.INoteService;
 import it.tickets.manager.Service.ITicketService;
 import it.tickets.manager.Service.IUserService;
 import it.tickets.manager.Service.TicketService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,8 +44,16 @@ public class NoteController {
     }
 
     @PostMapping("/{ticketId}/addNote")
-    public String addNote(@PathVariable("ticketId") Integer ticketid, @ModelAttribute("note") NoteModel note,BindingResult result) {
+    public String addNote(@PathVariable("ticketId") Integer ticketid, @Valid @ModelAttribute("note") NoteModel note, BindingResult result, Model model) {
+        if (note.getNotes().isBlank()) {
+            result.addError(new ObjectError("notes", "notes non può essere vuoto"));
+        }
+
         if (result.hasErrors()) {
+            TicketModel ticket = ticketService.findByTicketId(ticketid);
+            model.addAttribute("user",ticket.getUser());
+            model.addAttribute("ticket",ticket);
+            note.setUser(ticket.getUser());
             return "formNote";
         }
 

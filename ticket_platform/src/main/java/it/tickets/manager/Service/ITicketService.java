@@ -4,6 +4,7 @@ import it.tickets.manager.Model.CategoriesModel;
 import it.tickets.manager.Model.TicketModel;
 import it.tickets.manager.Model.TicketState;
 import it.tickets.manager.Model.UserModel;
+import it.tickets.manager.Security.DatabaseUserDetails;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,4 +28,6 @@ public interface ITicketService {
 
 
     boolean canChangeAvailability(UserModel user);
+
+    List<TicketModel> searchByTitleAndUserId(String title, UserModel user);
 }

@@ -18,17 +18,17 @@
 <div th:replace="~{fragments.html::header-block}"></div>
 
 <main class="container">
-    <div sec:authorize="isAuthenticated()">Text visible only to authenticated users.</div>
+    <div sec:authorize="isAuthenticated()" class="m-5"></div>
 
     <h1>Dettaglio Operatore:</h1>
     <div class="bg-body-tertiary p-5 rounded mt-3">
         <p sec:authentication="name"></p>
         <p th:text="${available}"></p>
-        <p th:unless="${showButton}">hai ticket aperti</p>
-        <form th:if="${showButton}" th:action="@{/tickets/changeUserState}" method="post">/*ricontrollo dopo*/
+        <p th:unless="${showButton}">non puoi cambiare stato, devi terminare i tuoi ticket</p>
+        <form th:if="${showButton}" th:action="@{/tickets/changeUserState}" method="post">/**/
             <input type="submit" value="cambia stato">
         </form>
-        <a th:text="@{/tickests/user/{userId}(userId=${})}">torna ai tickets</a>
+        <a th:href="@{/tickests/user/{userId}(userId=${goHome})}">torna ai tickets</a>
     </div>
 
 </main>

@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -15,6 +17,7 @@ public class TicketModel {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
 
+    @NotBlank(message = "non può essere vuoto")
     private String title;
 
 
@@ -22,12 +25,12 @@ public class TicketModel {
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate date;
 
-
+    @NotBlank(message = "non può essere vuoto")
     @Column
     private String text;
 
 
-
+    @NotNull(message = "non può essere vuoto")
     private TicketState state;
 
     @ManyToOne

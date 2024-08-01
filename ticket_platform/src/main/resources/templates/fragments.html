@@ -27,7 +27,7 @@
           <a class="nav-link" sec:authorize="hasAuthority('ADMIN')" th:href="@{/tickets/createTicket}">Aggiungi Ticket</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" th:href="@{/formPage}" sec:authorize="hasAuthority('ADMIN')">Aggiungi User</a>
+          <a class="nav-link" th:href="@{/tickets/user}" sec:authorize="hasAuthority('USER')">i tuoi dati</a>
         </li>
 
       </ul>

@@ -2,6 +2,7 @@ package it.tickets.manager.Model;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,6 +15,7 @@ public class NoteModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotBlank(message = "non puo' essere vuoto")
     private String notes;
 
     private LocalDate date;

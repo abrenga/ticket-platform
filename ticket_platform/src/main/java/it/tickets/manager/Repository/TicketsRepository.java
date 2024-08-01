@@ -21,4 +21,5 @@ List<TicketModel> findByCategory(CategoriesModel categoies);
 List<TicketModel> findByState(TicketState state);
 
 
+    List<TicketModel> findByTitleLikeAndUser(String s, UserModel user);
 }

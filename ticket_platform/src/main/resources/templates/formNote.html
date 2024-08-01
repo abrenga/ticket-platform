@@ -15,10 +15,8 @@
 </head>
 <body>
 
-
-<div class="row mt-4 g-5">
-</div>
-<div class="col-md-7 col-lg-8">
+<div class="container">
+    <div class="d-flex col-md-7  p-5 col-lg-8">
     <h4 class="mb-3">Aggiungi Note</h4>
     <form class="needs-validation" novalidate="" th:object="${note}"
           th:action="@{/notes/{id}/addNote(id=${ticket.id})}"
@@ -30,9 +28,9 @@
             <div>
                 <input type="hidden" class="form-control" id="user" th:field="*{user}" th:errorClass="is-invalid">
             </div>
-            <div class="col-sm-3">
-                <label for="note" class="form-label">nota:</label>
-                <input type="text" class="form-control" id="note" th:field="*{notes}" th:errorClass="is-invalid">
+            <div class="col-12" for="note">
+                <label for="note" class="form-label"></label>
+                <textarea class="form-control" aria-label="With textarea" id="note" th:field="*{notes}" th:errorClass="is-invalid" ></textarea>
                 <div th:if="${#fields.hasErrors('notes')}" class="invalid-feedback">
 
                     <ul>
@@ -41,9 +39,10 @@
                 </div>
 
             </div>
-            <button class="w-100 btn btn-primary btn-lg mt-4" type="submit">Aggiungi nota</button>
+            <button class="w-100 btn btn-secondary btn mt-4" type="submit">Aggiungi nota</button>
         </div>
     </form>
+</div>
 </div>
 </body>
 <div th:replace="~{fragments.html::footer-block}"></div>

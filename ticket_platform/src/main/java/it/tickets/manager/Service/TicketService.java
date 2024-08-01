@@ -5,6 +5,7 @@ import it.tickets.manager.Model.TicketModel;
 import it.tickets.manager.Model.TicketState;
 import it.tickets.manager.Model.UserModel;
 import it.tickets.manager.Repository.TicketsRepository;
+import it.tickets.manager.Security.DatabaseUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,6 +59,11 @@ public class TicketService implements ITicketService {
         return tickets;
     }
 
+    public List<TicketModel> searchByTitleAndUserId(String title, UserModel user) {
+        List<TicketModel> tickets= ticketRepository.findByTitleLikeAndUser("%"+title+"%",user );
+        return tickets;
+    }
+
     public List<TicketModel> searchByCategory(CategoriesModel categoies) {
         List<TicketModel>  tickets = ticketRepository.findByCategory(categoies);
         return tickets;
@@ -81,10 +87,7 @@ public class TicketService implements ITicketService {
 		return true;
     	
     }
-    
 
 
-    
-  
 
 }

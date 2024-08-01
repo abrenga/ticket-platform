@@ -42,8 +42,8 @@
                     </div>
 
                     <div class="col-sm-9">
-                        <label for="description" class="form-label">Descrizione</label>
-                        <input type="text" class="form-control" th:readonly="${!isAdmin}" id="description"  th:field="*{text}">
+                        <label for="text" class="form-label">Descrizione</label>
+                        <input type="text" class="form-control" th:readonly="${!isAdmin}" id="text"  th:field="*{text}">
                         <div th:if="${#fields.hasErrors('text')}" class="invalid-feedback">
 
                             <ul>

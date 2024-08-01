@@ -23,7 +23,7 @@
 			<h2 th:text="${showDetail.title}"></h2>
 			<h6 th:text="${showDetail.category.category}"></h6>
 			<h7 th:text="${showDetail.state}"></h7>
-			<p th:text="${showDetail.date}"></p>
+			<p th:text="${#temporals.format(showDetail.date, 'dd/MM/yyyy')}"></p>
 			<p class="lead" th:text="${showDetail.text}"></p>
 			<a class="btn btn-md btn-secondary" href="/docs/5.3/components/navbar/" role="button"
 				th:href="@{/tickets/updateTicket/{id}(id=${showDetail.id})}" >modifica</a>
