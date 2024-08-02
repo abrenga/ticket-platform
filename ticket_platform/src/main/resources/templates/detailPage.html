@@ -29,7 +29,7 @@
 				th:href="@{/tickets/updateTicket/{id}(id=${showDetail.id})}" >modifica</a>
 			<a class="btn btn-md btn-secondary" href="/docs/5.3/components/navbar/" role="button"
 				th:href="@{/notes/{id}/addNote(id=${showDetail.id})}">Aggiungi nota:</a>
-			<form class="mt-3" th:action="@{/tickets/delete/{id}(id=${showDetail.id})}" th:method="post">
+			<form class="mt-3" th:if="${isAdmin}" th:action="@{/tickets/delete/{id}(id=${showDetail.id})}" th:method="post">
 				<input type="submit" th:value="cancella" class="btn btn-md btn-danger">
 			</form>
 

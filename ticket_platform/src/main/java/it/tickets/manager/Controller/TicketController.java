@@ -100,12 +100,13 @@ public class TicketController {
         }
 
     @GetMapping("{id}")
-    public String showTicketDetails(@PathVariable("id") Integer id, Model model) {
+    public String showTicketDetails(@PathVariable("id") Integer id,Authentication authentication, Model model) {
         model.addAttribute("searchText", new TicketModel());
         TicketModel ticket = ticketService.findByTicketId(id);
         List<NoteModel> notes =noteService.showAllNotesByTicketId(id);
         model.addAttribute("notes", notes);
         model.addAttribute("showDetail", ticket);
+        model.addAttribute("isAdmin", hasAuthority(authentication,"ADMIN"));
         return "detailPage";
 
     }
@@ -188,8 +189,6 @@ public class TicketController {
     //aggiunta del nome del username
     @GetMapping("/user")
     public String index(Authentication authentication, Model model) {
-//        model.addAttribute("authenticator", authentication);
-//        model.addAttribute("isAuthenticated", authentication.isAuthenticated());
         DatabaseUserDetails userDetails = (DatabaseUserDetails) authentication.getPrincipal();
         model.addAttribute("userDetails", userDetails);
         UserModel user = userService.findUserByName(userDetails.getUsername());

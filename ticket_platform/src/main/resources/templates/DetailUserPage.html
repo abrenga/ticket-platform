@@ -25,7 +25,7 @@
         <p sec:authentication="name"></p>
         <p th:text="${available}"></p>
         <p th:unless="${showButton}">non puoi cambiare stato, devi terminare i tuoi ticket</p>
-        <form th:if="${showButton}" th:action="@{/tickets/changeUserState}" method="post">/**/
+        <form th:if="${showButton}" th:action="@{/tickets/changeUserState}" method="post">
             <input type="submit" value="cambia stato">
         </form>
         <a th:href="@{/tickets/user/{userId}(userId=${goHome})}">torna ai tickets</a>
