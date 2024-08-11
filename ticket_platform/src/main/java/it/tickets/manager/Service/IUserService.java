@@ -11,4 +11,6 @@ public interface IUserService {
     List<UserModel> showUser();
 
     void save(UserModel user);
+
+    UserModel findUserByName(String username);
 }

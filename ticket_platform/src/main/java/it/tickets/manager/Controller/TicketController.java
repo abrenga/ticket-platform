@@ -8,6 +8,7 @@ import it.tickets.manager.Model.UserModel;
 import it.tickets.manager.Security.DatabaseUserDetails;
 import it.tickets.manager.Service.INoteService;
 import it.tickets.manager.Service.ITicketService;
+import it.tickets.manager.Service.IUserService;
 import it.tickets.manager.Service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class TicketController {
     @Autowired
     public ITicketService ticketService;
     @Autowired
-    private UserService userService;
+    private IUserService userService;
     @Autowired
     private it.tickets.manager.Service.categoryService categoryService;
     @Autowired
@@ -45,7 +46,7 @@ public class TicketController {
         return false;
     }
 
-    @GetMapping("afterLogin")
+    /*@GetMapping("afterLogin")
     public String onAfterLogin(Authentication authentication) {
         if (authentication.isAuthenticated()) {
             if (hasAuthority(authentication, "ADMIN")) {
@@ -57,7 +58,7 @@ public class TicketController {
         } else {
             return "redirect:/login";
         }
-    }
+    }*/
 
     /*visualizza tutti i ticket nel database*/
     @GetMapping
@@ -187,7 +188,7 @@ public class TicketController {
     }
 
     //aggiunta del nome del username
-    @GetMapping("/user")
+    @GetMapping("/user")// dettaglio  utente ofline-online
     public String index(Authentication authentication, Model model) {
         DatabaseUserDetails userDetails = (DatabaseUserDetails) authentication.getPrincipal();
         model.addAttribute("userDetails", userDetails);
